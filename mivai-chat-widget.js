@@ -4,19 +4,26 @@ window.addEventListener("load", function () {
     // ==========================
     // CONFIG DALLO <script> (data-*)
     // ==========================
-    const script =
-      document.currentScript ||
-      (function () {
-        const scripts = document.getElementsByTagName("script");
-        return scripts[scripts.length - 1];
-      })();
 
+    function findMivaiScript() {
+      const scripts = document.getElementsByTagName("script");
+      for (let i = 0; i < scripts.length; i++) {
+        const s = scripts[i];
+        if ((s.src || "").includes("mivai-chat-widget")) {
+          return s;
+        }
+      }
+      return null;
+    }
+
+    const script = findMivaiScript();
     const ds = script ? script.dataset : {};
 
-    const API_URL =
-      ds.mivaiApiUrl || "https://chat-f6t3w2izza-ew.a.run.app";
+    // URL fisso della Cloud Function
+    const API_URL = "https://chat-f6t3w2izza-ew.a.run.app";
 
-    const PROJECT_ID = ds.mivaiProjectId || "";
+    // ProjectId letto dal data- attribute
+    const PROJECT_ID = ds.mivaiProjectId || "default-project";
 
     const CLIENT_NAME = ds.mivaiClientName || "Assistente Hotel";
 
@@ -26,6 +33,7 @@ window.addEventListener("load", function () {
     const CLIENT_LOGO_URL =
       ds.mivaiClientLogo ||
       "https://via.placeholder.com/80x80.png?text=LOGO";
+
 
     // Quick replies: stringa JSON oppure lista separata da |
     let QUICK_REPLIES = [
