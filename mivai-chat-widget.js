@@ -14,7 +14,7 @@ window.addEventListener("load", function () {
     const ds = script ? script.dataset : {};
 
     const API_URL =
-      ds.mivaiApiUrl || "https://europe-west1-mivaichatbot.cloudfunctions.net/chat";
+      ds.mivaiApiUrl || "https://chat-f6t3w2izza-ew.a.run.app";
 
     const PROJECT_ID = ds.mivaiProjectId || "hotel-demo";
 
