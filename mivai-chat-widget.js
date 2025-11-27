@@ -16,7 +16,7 @@ window.addEventListener("load", function () {
     const API_URL =
       ds.mivaiApiUrl || "https://chat-f6t3w2izza-ew.a.run.app";
 
-    const PROJECT_ID = ds.mivaiProjectId || "hotel-demo";
+    const PROJECT_ID = ds.mivaiProjectId || "";
 
     const CLIENT_NAME = ds.mivaiClientName || "Assistente Hotel";
 
