@@ -34,7 +34,6 @@ window.addEventListener("load", function () {
       ds.mivaiClientLogo ||
       "https://via.placeholder.com/80x80.png?text=LOGO";
 
-
     // Quick replies: stringa JSON oppure lista separata da |
     let QUICK_REPLIES = [
       "Quali sono gli orari di check-in e check-out?",
@@ -82,6 +81,44 @@ window.addEventListener("load", function () {
       --mivai-bg-outer: ${BG_OUTER};
       --mivai-bg-card: ${BG_CARD};
       --mivai-bg-card-top: ${BG_CARD_TOP};
+    }
+
+    /* Reset locale per evitare che il CSS del sito modifichi il widget */
+    .mivai-chat-window,
+    .mivai-chat-window * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+      letter-spacing: normal;
+      text-transform: none;
+    }
+
+    .mivai-chat-input {
+      background: #10162E !important;
+      color: #ffffff !important;
+      border-radius: 999px !important;
+      border: 1px solid rgba(245,193,78,0.6) !important;
+      box-shadow: none !important;
+      font-size: 13px !important;
+    }
+
+    .mivai-chat-input::placeholder {
+      color: #7f87b6 !important;
+      opacity: 1 !important;
+    }
+
+    .mivai-chat-label {
+      background: #0F182F !important;
+      color: #F5F6FF !important;
+      font-size: 11px !important;
+      border-radius: 999px !important;
+    }
+
+    .mivai-quick-btn {
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      border-radius: 999px !important;
+      text-transform: none !important;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.35) !important;
     }
 
     .mivai-chat-launcher-wrap {
