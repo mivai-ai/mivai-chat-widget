@@ -100,6 +100,19 @@ window.addEventListener("load", function () {
       text-transform: none !important;
     }
 
+    /* Hard reset per input e button SOLO dentro la form del chatbot */
+    .mivai-chat-window .mivai-chat-form input,
+    .mivai-chat-window .mivai-chat-form button {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+      text-transform: none !important;
+      letter-spacing: normal !important;
+      border-radius: 999px !important;
+      box-shadow: none !important;
+      border-width: 0 !important;
+      border-style: solid !important;
+      outline: none !important;
+    }
+
     /* Forza stile input (testo bianco) all'interno del widget */
     .mivai-chat-window .mivai-chat-input,
     .mivai-chat-window .mivai-chat-input:focus {
@@ -411,20 +424,20 @@ window.addEventListener("load", function () {
     }
 
     .mivai-chat-send {
-      border:none;
-      border-radius:999px;
-      background:var(--mivai-primary);
-      color:#1b1b1b;
-      padding:9px 16px;
-      cursor:pointer;
-      font-size:13px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      transition:transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
-      box-shadow:0 12px 26px rgba(0,0,0,0.55);
-      font-weight: 600;
+      border:none !important;
+      border-radius:999px !important;
+      background:var(--mivai-primary) !important;
+      color:#1b1b1b !important;
+      padding:9px 16px !important;
+      cursor:pointer !important;
+      font-size:13px !important;
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      gap:6px !important;
+      transition:transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease !important;
+      box-shadow:0 12px 26px rgba(0,0,0,0.55) !important;
+      font-weight: 600 !important;
     }
     .mivai-chat-send:hover {
       transform:translateY(-1px);
