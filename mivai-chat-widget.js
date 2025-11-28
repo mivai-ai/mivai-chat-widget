@@ -16,7 +16,9 @@ window.addEventListener("load", function () {
       return null;
     }
 
-    const script = findMivaiScript();
+    // ✅ Prima prova a usare il tag <script> che ha caricato questo file
+    //    (document.currentScript). In fallback cerca il primo script con "mivai-chat-widget" nell'URL.
+    const script = document.currentScript || findMivaiScript();
     const ds = script ? script.dataset : {};
 
     // URL fisso della Cloud Function
