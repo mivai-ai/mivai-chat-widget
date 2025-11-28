@@ -7,18 +7,24 @@ window.addEventListener("load", function () {
 
     function findMivaiScript() {
       const scripts = document.getElementsByTagName("script");
-      for (let i = 0; i < scripts.length; i++) {
+      // cerco lo script che ha data-mivai-*
+      for (let i = scripts.length - 1; i >= 0; i--) {
         const s = scripts[i];
-        if ((s.src || "").includes("mivai-chat-widget")) {
+        if (!s.dataset) continue;
+        if (
+          s.dataset.mivaiProjectId ||
+          s.dataset.mivaiClientName ||
+          s.dataset.mivaiClientLogo ||
+          s.dataset.mivaiSubtitle ||
+          s.dataset.mivaiQuickReplies
+        ) {
           return s;
         }
       }
       return null;
     }
 
-    // ✅ Prima prova a usare il tag <script> che ha caricato questo file
-    //    (document.currentScript). In fallback cerca il primo script con "mivai-chat-widget" nell'URL.
-    const script = document.currentScript || findMivaiScript();
+    const script = findMivaiScript();
     const ds = script ? script.dataset : {};
 
     // URL fisso della Cloud Function
@@ -99,7 +105,7 @@ window.addEventListener("load", function () {
     .mivai-chat-window .mivai-chat-input:focus {
       background: #10162E !important;
       color: #ffffff !important;
-      -webkit-text-fill-color: #ffffff !important; /* Safari/Chrome */
+      -webkit-text-fill-color: #ffffff !important;
       border-radius: 999px !important;
       border: 1px solid rgba(245,193,78,0.6) !important;
       box-shadow: none !important;
@@ -296,7 +302,6 @@ window.addEventListener("load", function () {
       gap: 8px;
     }
 
-    /* LISTA MESSAGGI CON SCROLLBAR PERSONALIZZATA */
     .mivai-chat-messages {
       padding: 4px 2px 4px;
       max-height: 400px;
@@ -304,7 +309,6 @@ window.addEventListener("load", function () {
       scrollbar-width: thin;
       scrollbar-color: rgba(245, 193, 78, 0.8) transparent;
     }
-
     .mivai-chat-messages::-webkit-scrollbar {
       width: 6px;
     }
@@ -347,7 +351,6 @@ window.addEventListener("load", function () {
       border-bottom-left-radius: 6px;
     }
 
-    /* Quick replies come messaggio del bot */
     .mivai-quick-wrapper {
       width: 100%;
       display: flex;
