@@ -78,7 +78,7 @@ window.addEventListener("load", function () {
 
     const PRIVACY_NOTE = "La chat è trascritta e visibile allo staff dell'hotel.";
 
-    // ==========================
+  
     // STILI
     // ==========================
     const style = document.createElement("style");
