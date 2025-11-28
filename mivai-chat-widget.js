@@ -88,24 +88,29 @@ window.addEventListener("load", function () {
     .mivai-chat-window * {
       box-sizing: border-box;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-      letter-spacing: normal;
-      text-transform: none;
+      letter-spacing: normal !important;
+      text-transform: none !important;
     }
 
-    .mivai-chat-input {
+    /* Forza stile input (testo bianco) all'interno del widget */
+    .mivai-chat-window .mivai-chat-input,
+    .mivai-chat-window .mivai-chat-input:focus {
       background: #10162E !important;
       color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important; /* Safari/Chrome */
       border-radius: 999px !important;
       border: 1px solid rgba(245,193,78,0.6) !important;
       box-shadow: none !important;
       font-size: 13px !important;
+      outline: none !important;
     }
 
-    .mivai-chat-input::placeholder {
+    .mivai-chat-window .mivai-chat-input::placeholder {
       color: #7f87b6 !important;
       opacity: 1 !important;
     }
 
+    /* Label palloncino accanto all'icona */
     .mivai-chat-label {
       background: #0F182F !important;
       color: #F5F6FF !important;
@@ -113,6 +118,7 @@ window.addEventListener("load", function () {
       border-radius: 999px !important;
     }
 
+    /* Bottoni quick replies */
     .mivai-quick-btn {
       font-size: 13px !important;
       font-weight: 500 !important;
@@ -129,7 +135,6 @@ window.addEventListener("load", function () {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     .mivai-chat-launcher {
@@ -232,7 +237,6 @@ window.addEventListener("load", function () {
       transform: translateY(14px) scale(0.96);
       pointer-events: none;
       transition: opacity 0.22s ease, transform 0.22s ease;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     .mivai-chat-window.mivai-open {
       opacity: 1;
@@ -295,21 +299,16 @@ window.addEventListener("load", function () {
       padding: 4px 2px 4px;
       max-height: 400px;
       overflow-y: auto;
-
-      /* Firefox */
       scrollbar-width: thin;
       scrollbar-color: rgba(245, 193, 78, 0.8) transparent;
     }
 
-    /* Chrome, Edge, Safari */
     .mivai-chat-messages::-webkit-scrollbar {
       width: 6px;
     }
-
     .mivai-chat-messages::-webkit-scrollbar-track {
       background: transparent;
     }
-
     .mivai-chat-messages::-webkit-scrollbar-thumb {
       background: rgba(245, 193, 78, 0.85);
       border-radius: 999px;
@@ -379,11 +378,8 @@ window.addEventListener("load", function () {
       padding:9px 14px;
       background:#ffffff;
       color:#1d2233;
-      font-size:13px;
-      font-weight:500;
       cursor:pointer;
       text-align:center;
-      box-shadow:0 8px 18px rgba(0,0,0,0.35);
       transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
       width:100%;
     }
@@ -408,19 +404,7 @@ window.addEventListener("load", function () {
       gap:8px;
       margin-bottom: 4px;
     }
-    .mivai-chat-input {
-      flex:1;
-      border-radius: 999px;
-      border:1px solid rgba(245,193,78,0.6);
-      outline:none;
-      padding:10px 14px;
-      font-size: 13px;
-      background:#10162E;
-      color:#fff;
-    }
-    .mivai-chat-input::placeholder {
-      color: #7f87b6;
-    }
+
     .mivai-chat-send {
       border:none;
       border-radius:999px;
