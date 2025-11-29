@@ -78,7 +78,7 @@ window.addEventListener("load", function () {
 
     const PRIVACY_NOTE = "La chat è trascritta e visibile allo staff dell'hotel.";
 
-  
+    // ==========================
     // STILI
     // ==========================
     const style = document.createElement("style");
@@ -124,6 +124,7 @@ window.addEventListener("load", function () {
       box-shadow: none !important;
       font-size: 13px !important;
       outline: none !important;
+      padding: 10px 14px !important;
     }
 
     .mivai-chat-window .mivai-chat-input::placeholder {
@@ -416,14 +417,26 @@ window.addEventListener("load", function () {
       border-top: 1px solid rgba(255,255,255,0.05);
       background: #050815;
     }
+
+    /* LAYOUT FORM INFERIORE */
     .mivai-chat-form {
-      display:flex;
-      align-items:center;
-      gap:8px;
+      display:flex !important;
+      align-items:center !important;
+      gap:8px !important;
       margin-bottom: 4px;
     }
 
+    /* L'input prende tutto lo spazio disponibile fino al bottone */
+    .mivai-chat-form .mivai-chat-input {
+      flex: 1 1 auto !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+
+    /* Bottone con dimensione fissa e stile del widget */
     .mivai-chat-send {
+      flex: 0 0 auto !important;
       border:none !important;
       border-radius:999px !important;
       background:var(--mivai-primary) !important;
@@ -438,6 +451,7 @@ window.addEventListener("load", function () {
       transition:transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease !important;
       box-shadow:0 12px 26px rgba(0,0,0,0.55) !important;
       font-weight: 600 !important;
+      white-space: nowrap !important;
     }
     .mivai-chat-send:hover {
       transform:translateY(-1px);
