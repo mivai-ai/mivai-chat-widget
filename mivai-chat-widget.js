@@ -509,6 +509,11 @@ window.addEventListener("load", function () {
       }
     }
 
+    /* NASCONDI LA LAUNCHER QUANDO FULLSCREEN */
+    .mivai-hidden-launcher {
+      display: none !important;
+    }
+
     /* MOBILE */
     @media (max-width: 768px) {
       .mivai-chat-window {
@@ -519,9 +524,23 @@ window.addEventListener("load", function () {
         max-width: none !important;
         max-height: calc(100vh - 96px) !important;
       }
+
+      /* QUANDO L’INPUT È FOCUS: MODAL FULLSCREEN */
+      .mivai-chat-window.mivai-fullscreen {
+        left: 0 !important;
+        right: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+      }
+
       .mivai-chat-body {
         max-height: calc(100vh - 220px) !important;
       }
+
       .mivai-chat-launcher-wrap {
         right: 16px !important;
         bottom: 16px !important;
@@ -590,8 +609,8 @@ window.addEventListener("load", function () {
     const formEl = win.querySelector(".mivai-chat-form");
     const inputEl = win.querySelector(".mivai-chat-input");
 
-    // ============
-    // FIX ZOOM iOS
+    // ============  
+    // FIX ZOOM iOS + FULLSCREEN
     // ============
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     let viewportMeta = document.querySelector('meta[name="viewport"]');
@@ -643,8 +662,24 @@ window.addEventListener("load", function () {
     }
 
     if (inputEl) {
-      inputEl.addEventListener("focus", disableZoomOnFocus);
-      inputEl.addEventListener("blur", restoreZoomOnBlur);
+      inputEl.addEventListener("focus", () => {
+        disableZoomOnFocus();
+
+        if (isIOS) {
+          win.classList.add("mivai-fullscreen");
+          launcherWrap.classList.add("mivai-hidden-launcher");
+        }
+      });
+
+      inputEl.addEventListener("blur", () => {
+        restoreZoomOnBlur();
+
+        if (isIOS) {
+          win.classList.remove("mivai-fullscreen");
+          launcherWrap.classList.remove("mivai-hidden-launcher");
+          window.scrollTo(0, 0);
+        }
+      });
     }
 
     let conversationId = "conv-" + Math.random().toString(36).slice(2);
@@ -837,7 +872,7 @@ window.addEventListener("load", function () {
       const text = inputEl.value.trim();
       if (!text) return;
       inputEl.value = "";
-      inputEl.blur(); // chiude tastiera mobile
+      inputEl.blur(); // chiude tastiera mobile e fa uscire dal fullscreen
       handleUserMessage(text);
     });
 
