@@ -590,6 +590,63 @@ window.addEventListener("load", function () {
     const formEl = win.querySelector(".mivai-chat-form");
     const inputEl = win.querySelector(".mivai-chat-input");
 
+    // ============
+    // FIX ZOOM iOS
+    // ============
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    let viewportMeta = document.querySelector('meta[name="viewport"]');
+    let originalViewportContent = viewportMeta
+      ? viewportMeta.getAttribute("content")
+      : null;
+
+    function disableZoomOnFocus() {
+      if (!isIOS) return;
+
+      if (!viewportMeta) {
+        viewportMeta = document.createElement("meta");
+        viewportMeta.name = "viewport";
+        viewportMeta.setAttribute(
+          "content",
+          "width=device-width, initial-scale=1.0"
+        );
+        document.head.appendChild(viewportMeta);
+        originalViewportContent = viewportMeta.getAttribute("content");
+      }
+
+      const base = originalViewportContent || "width=device-width, initial-scale=1.0";
+      let cleaned = base
+        .replace(/maximum-scale\s*=\s*[0-9.]+/i, "")
+        .replace(/,\s*,/g, ",")
+        .replace(/,\s*$/g, "");
+
+      if (cleaned.indexOf("width=") === -1) {
+        cleaned = "width=device-width, initial-scale=1.0";
+      }
+
+      viewportMeta.setAttribute(
+        "content",
+        cleaned + ", maximum-scale=1.0"
+      );
+    }
+
+    function restoreZoomOnBlur() {
+      if (!isIOS || !viewportMeta) return;
+
+      if (originalViewportContent) {
+        viewportMeta.setAttribute("content", originalViewportContent);
+      } else {
+        viewportMeta.setAttribute(
+          "content",
+          "width=device-width, initial-scale=1.0"
+        );
+      }
+    }
+
+    if (inputEl) {
+      inputEl.addEventListener("focus", disableZoomOnFocus);
+      inputEl.addEventListener("blur", restoreZoomOnBlur);
+    }
+
     let conversationId = "conv-" + Math.random().toString(36).slice(2);
     let isSending = false;
     let typingEl = null;
@@ -780,6 +837,7 @@ window.addEventListener("load", function () {
       const text = inputEl.value.trim();
       if (!text) return;
       inputEl.value = "";
+      inputEl.blur(); // chiude tastiera mobile
       handleUserMessage(text);
     });
 
