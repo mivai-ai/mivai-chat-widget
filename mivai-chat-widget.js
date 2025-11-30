@@ -27,22 +27,16 @@ window.addEventListener("load", function () {
     const script = findMivaiScript();
     const ds = script ? script.dataset : {};
 
-    // URL fisso della Cloud Function
     const API_URL = "https://chat-f6t3w2izza-ew.a.run.app";
-
-    // ProjectId letto dal data- attribute
     const PROJECT_ID = ds.mivaiProjectId || "default-project";
-
     const CLIENT_NAME = ds.mivaiClientName || "Assistente Hotel";
-
     const SUBTITLE =
       ds.mivaiSubtitle || "Fai una domanda o verifica una prenotazione ✨";
-
     const CLIENT_LOGO_URL =
       ds.mivaiClientLogo ||
       "https://via.placeholder.com/80x80.png?text=LOGO";
 
-    // Quick replies: stringa JSON oppure lista separata da |
+    // Quick replies
     let QUICK_REPLIES = [
       "Quali sono gli orari di check-in e check-out?",
       "Come posso verificare la disponibilità?",
@@ -68,8 +62,8 @@ window.addEventListener("load", function () {
     const BG_OUTER = "#050915";
     const BG_CARD = "#0B1730";
     const BG_CARD_TOP = "#12213F";
-    const PRIMARY = "#F5C14E"; // oro
-    const BLUE_MAIN = "#1E3163"; // blu principale scuro
+    const PRIMARY = "#F5C14E";
+    const BLUE_MAIN = "#1E3163";
 
     const MIVAI_LOGO =
       "https://cdn.prod.website-files.com/68c440493e6f97c7c1211e45/68c44164e687b29e1a46e8dc_Logo%20png%20trasparente-p-1600.png";
@@ -79,7 +73,7 @@ window.addEventListener("load", function () {
     const PRIVACY_NOTE = "La chat è trascritta e visibile allo staff dell'hotel.";
 
     // ==========================
-    // STILI
+    // STILI (scoped, indipendenti dal sito)
     // ==========================
     const style = document.createElement("style");
     style.innerHTML = `
@@ -94,26 +88,25 @@ window.addEventListener("load", function () {
     /* Reset locale per evitare che il CSS del sito modifichi il widget */
     .mivai-chat-window,
     .mivai-chat-window * {
-      box-sizing: border-box;
+      box-sizing: border-box !important;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
       letter-spacing: normal !important;
       text-transform: none !important;
+      margin: 0;
+      padding: 0;
     }
 
     /* Hard reset per input e button SOLO dentro la form del chatbot */
     .mivai-chat-window .mivai-chat-form input,
     .mivai-chat-window .mivai-chat-form button {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-      text-transform: none !important;
-      letter-spacing: normal !important;
       border-radius: 999px !important;
       box-shadow: none !important;
-      border-width: 0 !important;
-      border-style: solid !important;
+      border: 0 !important;
       outline: none !important;
+      background-image: none !important;
     }
 
-    /* Forza stile input (testo bianco) all'interno del widget */
+    /* INPUT: stile fisso + font-size >=16px per evitare zoom su iOS */
     .mivai-chat-window .mivai-chat-input,
     .mivai-chat-window .mivai-chat-input:focus {
       background: #10162E !important;
@@ -122,9 +115,13 @@ window.addEventListener("load", function () {
       border-radius: 999px !important;
       border: 1px solid rgba(245,193,78,0.6) !important;
       box-shadow: none !important;
-      font-size: 13px !important;
+      font-size: 16px !important;
+      line-height: 1.4 !important;
       outline: none !important;
-      padding: 10px 14px !important;
+      padding: 10px 16px !important;
+      flex: 1 1 auto !important;
+      width: auto !important;
+      min-width: 0 !important;
     }
 
     .mivai-chat-window .mivai-chat-input::placeholder {
@@ -138,6 +135,20 @@ window.addEventListener("load", function () {
       color: #F5F6FF !important;
       font-size: 11px !important;
       border-radius: 999px !important;
+      padding: 7px 14px !important;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.6) !important;
+      white-space: nowrap !important;
+      border: 1px solid rgba(255,255,255,0.06) !important;
+      transition: opacity 0.18s ease, transform 0.18s ease !important;
+    }
+    .mivai-chat-label strong {
+      color: var(--mivai-primary) !important;
+      font-weight: 600 !important;
+    }
+    .mivai-chat-label.mivai-hidden {
+      opacity: 0 !important;
+      transform: translateY(4px) !important;
+      pointer-events: none !important;
     }
 
     /* Bottoni quick replies */
@@ -150,178 +161,158 @@ window.addEventListener("load", function () {
     }
 
     .mivai-chat-launcher-wrap {
-      position: fixed;
-      right: 20px;
-      bottom: 24px;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      position: fixed !important;
+      right: 20px !important;
+      bottom: 24px !important;
+      z-index: 9999 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
     }
 
     .mivai-chat-launcher {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      border: 3px solid var(--mivai-primary);
-      outline: none;
-      cursor: pointer;
-      background: var(--mivai-blue);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.65);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-      position: relative;
+      width: 58px !important;
+      height: 58px !important;
+      border-radius: 50% !important;
+      border: 3px solid var(--mivai-primary) !important;
+      outline: none !important;
+      cursor: pointer !important;
+      background: var(--mivai-blue) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.65) !important;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease !important;
+      position: relative !important;
     }
     .mivai-chat-launcher:hover {
-      transform: translateY(-2px) scale(1.04);
-      box-shadow: 0 24px 56px rgba(0,0,0,0.8);
-      filter: brightness(1.03);
+      transform: translateY(-2px) scale(1.04) !important;
+      box-shadow: 0 24px 56px rgba(0,0,0,0.8) !important;
+      filter: brightness(1.03) !important;
     }
     .mivai-chat-launcher:active {
-      transform: scale(0.96);
+      transform: scale(0.96) !important;
     }
 
     .mivai-chat-launcher-bubble {
-      width: 30px;
-      height: 22px;
-      border-radius: 16px;
-      background: #ffffff;
-      position: relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:3px;
+      width: 30px !important;
+      height: 22px !important;
+      border-radius: 16px !important;
+      background: #ffffff !important;
+      position: relative !important;
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      gap:3px !important;
     }
     .mivai-chat-launcher-bubble::after {
-      content:"";
-      position:absolute;
-      bottom:-5px;
-      right:8px;
-      width:9px;
-      height:9px;
-      background:#ffffff;
-      border-radius: 2px 6px 6px 6px;
-      transform: rotate(18deg);
+      content:"" !important;
+      position:absolute !important;
+      bottom:-5px !important;
+      right:8px !important;
+      width:9px !important;
+      height:9px !important;
+      background:#ffffff !important;
+      border-radius: 2px 6px 6px 6px !important;
+      transform: rotate(18deg) !important;
     }
     .mivai-chat-launcher-bubble span {
-      width:4px;
-      height:4px;
-      border-radius:50%;
-      background: var(--mivai-blue);
-      opacity:0.8;
-      animation:mivai-typing-dots 1.2s infinite ease-in-out;
+      width:4px !important;
+      height:4px !important;
+      border-radius:50% !important;
+      background: var(--mivai-blue) !important;
+      opacity:0.8 !important;
+      animation:mivai-typing-dots 1.2s infinite ease-in-out !important;
     }
-    .mivai-chat-launcher-bubble span:nth-child(2){animation-delay:0.18s;}
-    .mivai-chat-launcher-bubble span:nth-child(3){animation-delay:0.36s;}
+    .mivai-chat-launcher-bubble span:nth-child(2){animation-delay:0.18s !important;}
+    .mivai-chat-launcher-bubble span:nth-child(3){animation-delay:0.36s !important;}
 
     @keyframes mivai-typing-dots {
       0%, 80%, 100% { transform:translateY(0); opacity:0.4; }
       40% { transform:translateY(-2px); opacity:1; }
     }
 
-    .mivai-chat-label {
-      background: #0F182F;
-      color: #F5F6FF;
-      font-size: 11px;
-      padding: 7px 14px;
-      border-radius: 999px;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.6);
-      white-space: nowrap;
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: opacity 0.18s ease, transform 0.18s ease;
-    }
-    .mivai-chat-label strong {
-      color: var(--mivai-primary);
-      font-weight: 600;
-    }
-    .mivai-chat-label.mivai-hidden {
-      opacity: 0;
-      transform: translateY(4px);
-      pointer-events: none;
-    }
-
     .mivai-chat-window {
-      position: fixed;
-      right: 20px;
-      bottom: 96px;
-      width: 420px;
-      max-width: calc(100% - 32px);
-      background: var(--mivai-bg-outer);
-      border-radius: 26px;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.9);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 9999;
-      opacity: 0;
-      transform: translateY(14px) scale(0.96);
-      pointer-events: none;
-      transition: opacity 0.22s ease, transform 0.22s ease;
+      position: fixed !important;
+      right: 20px !important;
+      bottom: 96px !important;
+      width: 420px !important;
+      max-width: calc(100% - 32px) !important;
+      background: var(--mivai-bg-outer) !important;
+      border-radius: 26px !important;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.9) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+      z-index: 9999 !important;
+      opacity: 0 !important;
+      transform: translateY(14px) scale(0.96) !important;
+      pointer-events: none !important;
+      transition: opacity 0.22s ease, transform 0.22s ease !important;
     }
     .mivai-chat-window.mivai-open {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
+      opacity: 1 !important;
+      transform: translateY(0) scale(1) !important;
+      pointer-events: auto !important;
     }
 
     .mivai-chat-header {
-      padding: 14px 18px 10px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: linear-gradient(135deg, var(--mivai-blue), var(--mivai-bg-card-top));
+      padding: 14px 18px 10px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      background: linear-gradient(135deg, var(--mivai-blue), var(--mivai-bg-card-top)) !important;
     }
     .mivai-chat-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #111827;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+      width: 40px !important;
+      height: 40px !important;
+      border-radius: 50% !important;
+      background: #111827 !important;
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      overflow:hidden !important;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.45) !important;
     }
     .mivai-chat-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
     }
     .mivai-chat-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: #fff !important;
     }
     .mivai-chat-subtitle {
-      font-size: 11px;
-      opacity: 0.9;
-      color: #f3f3ff;
+      font-size: 11px !important;
+      opacity: 0.9 !important;
+      color: #f3f3ff !important;
     }
     .mivai-chat-close {
-      margin-left: auto;
-      cursor: pointer;
-      opacity: 0.85;
-      color: #f5f5ff;
-      transition: opacity 0.15s ease, transform 0.15s ease;
+      margin-left: auto !important;
+      cursor: pointer !important;
+      opacity: 0.85 !important;
+      color: #f5f5ff !important;
+      transition: opacity 0.15s ease, transform 0.15s ease !important;
     }
-    .mivai-chat-close:hover { opacity: 1; transform: scale(1.05); }
+    .mivai-chat-close:hover { opacity: 1 !important; transform: scale(1.05) !important; }
 
     .mivai-chat-body {
-      background: var(--mivai-bg-card);
-      padding: 10px 14px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      background: var(--mivai-bg-card) !important;
+      padding: 10px 14px 12px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 8px !important;
+      max-height: 400px !important;
+      overflow: hidden !important;
     }
 
     .mivai-chat-messages {
-      padding: 4px 2px 4px;
-      max-height: 400px;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(245, 193, 78, 0.8) transparent;
+      padding: 4px 2px 4px !important;
+      overflow-y: auto !important;
+      scrollbar-width: thin !important;
+      scrollbar-color: rgba(245, 193, 78, 0.8) transparent !important;
     }
     .mivai-chat-messages::-webkit-scrollbar {
       width: 6px;
@@ -336,107 +327,95 @@ window.addEventListener("load", function () {
     }
 
     .mivai-chat-msg {
-      margin: 6px 0;
-      display: flex;
+      margin: 6px 0 !important;
+      display: flex !important;
       animation: mivai-msg-enter 0.22s ease-out;
     }
     .mivai-chat-msg-user {
-      justify-content: flex-end;
+      justify-content: flex-end !important;
     }
     .mivai-chat-bubble {
-      max-width: 82%;
-      padding: 10px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      line-height: 1.45;
-      white-space: pre-wrap;
-      word-break: break-word;
-      box-shadow: 0 10px 26px rgba(0,0,0,0.65);
+      max-width: 82% !important;
+      padding: 10px 14px !important;
+      border-radius: 20px !important;
+      font-size: 13px !important;
+      line-height: 1.45 !important;
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.65) !important;
     }
     .mivai-chat-bubble-user {
-      background: radial-gradient(circle at 0 0, #ffffff66, var(--mivai-blue));
-      color: #ffffff;
-      border-bottom-right-radius: 6px;
+      background: radial-gradient(circle at 0 0, #ffffff66, var(--mivai-blue)) !important;
+      color: #ffffff !important;
+      border-bottom-right-radius: 6px !important;
     }
     .mivai-chat-bubble-bot {
-      background: #141F3A;
-      color: #f4f5ff;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-bottom-left-radius: 6px;
+      background: #141F3A !important;
+      color: #f4f5ff !important;
+      border: 1px solid rgba(255,255,255,0.08) !important;
+      border-bottom-left-radius: 6px !important;
     }
 
     .mivai-quick-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: flex-start;
-      margin: 6px 0 4px;
+      width: 100% !important;
+      display: flex !important;
+      justify-content: flex-start !important;
+      margin: 6px 0 4px !important;
     }
     .mivai-quick-inner {
-      max-width: 100%;
-      background: #141F3A;
-      border-radius: 18px;
-      padding: 10px 12px 12px;
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 10px 26px rgba(0,0,0,0.65);
-      color:#f4f5ff;
-      font-size: 12px;
+      max-width: 100% !important;
+      background: #141F3A !important;
+      border-radius: 18px !important;
+      padding: 10px 12px 12px !important;
+      border: 1px solid rgba(255,255,255,0.08) !important;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.65) !important;
+      color:#f4f5ff !important;
+      font-size: 12px !important;
     }
     .mivai-quick-title {
-      font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 12px;
+      font-weight: 600 !important;
+      margin-bottom: 8px !important;
+      font-size: 12px !important;
     }
     .mivai-quick-buttons {
-      display:flex;
-      flex-direction:column;
-      gap:8px;
+      display:flex !important;
+      flex-direction:column !important;
+      gap:8px !important;
     }
     .mivai-quick-btn {
-      border:none;
-      border-radius:999px;
-      padding:9px 14px;
-      background:#ffffff;
-      color:#1d2233;
-      cursor:pointer;
-      text-align:center;
-      transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
-      width:100%;
+      border:none !important;
+      border-radius:999px !important;
+      padding:9px 14px !important;
+      background:#ffffff !important;
+      color:#1d2233 !important;
+      cursor:pointer !important;
+      text-align:center !important;
+      transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease !important;
+      width:100% !important;
     }
     .mivai-quick-btn:hover {
-      transform:translateY(-1px);
-      box-shadow:0 12px 28px rgba(0,0,0,0.45);
-      background:#f5f5ff;
+      transform:translateY(-1px) !important;
+      box-shadow:0 12px 28px rgba(0,0,0,0.45) !important;
+      background:#f5f5ff !important;
     }
     .mivai-quick-btn:active {
-      transform:scale(0.97);
-      box-shadow:0 4px 10px rgba(0,0,0,0.3);
+      transform:scale(0.97) !important;
+      box-shadow:0 4px 10px rgba(0,0,0,0.3) !important;
     }
 
     .mivai-chat-footer {
-      padding: 10px 14px 10px;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      background: #050815;
+      padding: 10px 14px 10px !important;
+      border-top: 1px solid rgba(255,255,255,0.05) !important;
+      background: #050815 !important;
     }
-
-    /* LAYOUT FORM INFERIORE */
     .mivai-chat-form {
       display:flex !important;
       align-items:center !important;
       gap:8px !important;
-      margin-bottom: 4px;
+      margin-bottom: 4px !important;
     }
 
-    /* L'input prende tutto lo spazio disponibile fino al bottone */
-    .mivai-chat-form .mivai-chat-input {
-      flex: 1 1 auto !important;
-      width: auto !important;
-      min-width: 0 !important;
-      max-width: 100% !important;
-    }
-
-    /* Bottone con dimensione fissa e stile del widget */
     .mivai-chat-send {
-      flex: 0 0 auto !important;
       border:none !important;
       border-radius:999px !important;
       background:var(--mivai-primary) !important;
@@ -451,66 +430,67 @@ window.addEventListener("load", function () {
       transition:transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease !important;
       box-shadow:0 12px 26px rgba(0,0,0,0.55) !important;
       font-weight: 600 !important;
+      flex-shrink: 0 !important;
       white-space: nowrap !important;
     }
     .mivai-chat-send:hover {
-      transform:translateY(-1px);
-      box-shadow:0 15px 34px rgba(0,0,0,0.7);
-      filter: brightness(1.02);
+      transform:translateY(-1px) !important;
+      box-shadow:0 15px 34px rgba(0,0,0,0.7) !important;
+      filter: brightness(1.02) !important;
     }
     .mivai-chat-send:active {
-      transform:scale(0.96);
-      box-shadow:0 4px 12px rgba(0,0,0,0.45);
+      transform:scale(0.96) !important;
+      box-shadow:0 4px 12px rgba(0,0,0,0.45) !important;
     }
 
     .mivai-chat-privacy {
-      font-size: 10px;
-      color: #9ca3c8;
-      text-align: center;
-      margin-bottom: 2px;
+      font-size: 10px !important;
+      color: #9ca3c8 !important;
+      text-align: center !important;
+      margin-bottom: 2px !important;
     }
 
     .mivai-chat-branding {
-      display:flex;
-      justify-content:center;
-      align-items:center;
+      display:flex !important;
+      justify-content:center !important;
+      align-items:center !important;
     }
     .mivai-chat-branding a {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:2px 0;
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      padding:2px 0 !important;
     }
     .mivai-chat-branding img {
-      height: 36px;
-      opacity: 0.95;
-      filter: drop-shadow(0 0 4px rgba(0,0,0,0.7));
+      height: 36px !important;
+      opacity: 0.95 !important;
+      filter: drop-shadow(0 0 4px rgba(0,0,0,0.7)) !important;
     }
 
     .mivai-typing {
-      display:flex;
-      align-items:center;
-      gap:6px;
-      margin:6px 0 2px;
-      padding-left:4px;
+      display:flex !important;
+      align-items:center !important;
+      gap:6px !important;
+      margin:6px 0 2px !important;
+      padding-left:4px !important;
     }
     .mivai-typing-dot {
-      width:6px;
-      height:6px;
-      border-radius:50%;
-      background:rgba(255,255,255,0.7);
-      animation:mivai-typing 1s infinite ease-in-out;
+      width:6px !important;
+      height:6px !important;
+      border-radius:50% !important;
+      background:rgba(255,255,255,0.7) !important;
+      animation:mivai-typing 1s infinite ease-in-out !important;
     }
-    .mivai-typing-dot:nth-child(2) { animation-delay:0.18s; }
-    .mivai-typing-dot:nth-child(3) { animation-delay:0.36s; }
+    .mivai-typing-dot:nth-child(2) { animation-delay:0.18s !important; }
+    .mivai-typing-dot:nth-child(3) { animation-delay:0.36s !important; }
 
     .mivai-chat-link {
-      color: ${PRIMARY};
-      font-weight: 600;
-      text-decoration: none;
+      color: ${PRIMARY} !important;
+      font-weight: 600 !important;
+      text-decoration: none !important;
     }
     .mivai-chat-link:hover {
-      text-decoration: underline;
+      text-decoration: underline !important;
     }
 
     @keyframes mivai-typing {
@@ -529,15 +509,22 @@ window.addEventListener("load", function () {
       }
     }
 
-    @media (max-width: 480px) {
+    /* MOBILE */
+    @media (max-width: 768px) {
       .mivai-chat-window {
-        right: 10px;
-        bottom: 84px;
-        width: calc(100% - 20px);
+        left: 8px !important;
+        right: 8px !important;
+        bottom: 80px !important;
+        width: auto !important;
+        max-width: none !important;
+        max-height: calc(100vh - 96px) !important;
+      }
+      .mivai-chat-body {
+        max-height: calc(100vh - 220px) !important;
       }
       .mivai-chat-launcher-wrap {
-        right: 10px;
-        bottom: 14px;
+        right: 16px !important;
+        bottom: 16px !important;
       }
     }
     `;
@@ -679,7 +666,6 @@ window.addEventListener("load", function () {
           : "mivai-chat-bubble-bot");
 
       if (role === "bot") {
-        // Trasforma "Prenota qui: URL" in link "Clicca qui"
         const match = text.match(/Prenota qui:\s*(https?:\/\/\S+)/i);
         if (match) {
           const before = text.slice(0, match.index).trim();
