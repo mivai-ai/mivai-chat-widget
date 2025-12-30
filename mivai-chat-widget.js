@@ -70,7 +70,7 @@ window.addEventListener("load", function () {
     const MIVAI_LINK =
       "https://mivai.it/?utm_source=chatbot&utm_medium=widget&utm_campaign=mivai_brand";
 
-    const PRIVACY_NOTE = "La chat è trascritta e visibile allo staff dell'hotel.";
+    const PRIVACY_NOTE = "La chat è trascritta e visibile dal gestore del sito web";
 
     // ==========================
     // STILI (scoped, indipendenti dal sito)
