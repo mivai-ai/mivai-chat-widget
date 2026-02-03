@@ -879,7 +879,7 @@ window.addEventListener("load", function () {
     // Primo messaggio + quick replies
     setTimeout(() => {
       appendMessage(
-        "Ciao! 👋 Sono l'assistente AI dell'hotel. Come posso aiutarti?",
+        "Ciao! 👋 Come posso aiutarti?",
         "bot"
       );
       renderQuickReplies();
