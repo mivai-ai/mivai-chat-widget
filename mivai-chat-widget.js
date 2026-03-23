@@ -7,7 +7,6 @@ window.addEventListener("load", function () {
 
     function findMivaiScript() {
       const scripts = document.getElementsByTagName("script");
-      // cerco lo script che ha data-mivai-*
       for (let i = scripts.length - 1; i >= 0; i--) {
         const s = scripts[i];
         if (!s.dataset) continue;
@@ -43,6 +42,7 @@ window.addEventListener("load", function () {
       "Avete parcheggio disponibile?",
       "Colazione e pasti sono inclusi?",
     ];
+
     if (ds.mivaiQuickReplies) {
       try {
         if (ds.mivaiQuickReplies.trim().startsWith("[")) {
@@ -70,10 +70,11 @@ window.addEventListener("load", function () {
     const MIVAI_LINK =
       "https://mivai.it/?utm_source=chatbot&utm_medium=widget&utm_campaign=mivai_brand";
 
-    const PRIVACY_NOTE = "La chat è trascritta e visibile dal gestore del sito web";
+    const PRIVACY_NOTE =
+      "La chat è trascritta e visibile dal gestore del sito web";
 
     // ==========================
-    // STILI (scoped, indipendenti dal sito)
+    // STILI
     // ==========================
     const style = document.createElement("style");
     style.innerHTML = `
@@ -85,7 +86,6 @@ window.addEventListener("load", function () {
       --mivai-bg-card-top: ${BG_CARD_TOP};
     }
 
-    /* Reset locale per evitare che il CSS del sito modifichi il widget */
     .mivai-chat-window,
     .mivai-chat-window * {
       box-sizing: border-box !important;
@@ -96,7 +96,6 @@ window.addEventListener("load", function () {
       padding: 0;
     }
 
-    /* Hard reset per input e button SOLO dentro la form del chatbot */
     .mivai-chat-window .mivai-chat-form input,
     .mivai-chat-window .mivai-chat-form button {
       border-radius: 999px !important;
@@ -106,7 +105,6 @@ window.addEventListener("load", function () {
       background-image: none !important;
     }
 
-    /* INPUT: stile fisso + font-size >=16px per evitare zoom su iOS */
     .mivai-chat-window .mivai-chat-input,
     .mivai-chat-window .mivai-chat-input:focus {
       background: #10162E !important;
@@ -129,7 +127,6 @@ window.addEventListener("load", function () {
       opacity: 1 !important;
     }
 
-    /* Label palloncino accanto all'icona */
     .mivai-chat-label {
       background: #0F182F !important;
       color: #F5F6FF !important;
@@ -141,17 +138,18 @@ window.addEventListener("load", function () {
       border: 1px solid rgba(255,255,255,0.06) !important;
       transition: opacity 0.18s ease, transform 0.18s ease !important;
     }
+
     .mivai-chat-label strong {
       color: var(--mivai-primary) !important;
       font-weight: 600 !important;
     }
+
     .mivai-chat-label.mivai-hidden {
       opacity: 0 !important;
       transform: translateY(4px) !important;
       pointer-events: none !important;
     }
 
-    /* Bottoni quick replies */
     .mivai-quick-btn {
       font-size: 13px !important;
       font-weight: 500 !important;
@@ -185,11 +183,13 @@ window.addEventListener("load", function () {
       transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease !important;
       position: relative !important;
     }
+
     .mivai-chat-launcher:hover {
       transform: translateY(-2px) scale(1.04) !important;
       box-shadow: 0 24px 56px rgba(0,0,0,0.8) !important;
       filter: brightness(1.03) !important;
     }
+
     .mivai-chat-launcher:active {
       transform: scale(0.96) !important;
     }
@@ -205,6 +205,7 @@ window.addEventListener("load", function () {
       justify-content:center !important;
       gap:3px !important;
     }
+
     .mivai-chat-launcher-bubble::after {
       content:"" !important;
       position:absolute !important;
@@ -216,6 +217,7 @@ window.addEventListener("load", function () {
       border-radius: 2px 6px 6px 6px !important;
       transform: rotate(18deg) !important;
     }
+
     .mivai-chat-launcher-bubble span {
       width:4px !important;
       height:4px !important;
@@ -224,6 +226,7 @@ window.addEventListener("load", function () {
       opacity:0.8 !important;
       animation:mivai-typing-dots 1.2s infinite ease-in-out !important;
     }
+
     .mivai-chat-launcher-bubble span:nth-child(2){animation-delay:0.18s !important;}
     .mivai-chat-launcher-bubble span:nth-child(3){animation-delay:0.36s !important;}
 
@@ -250,6 +253,7 @@ window.addEventListener("load", function () {
       pointer-events: none !important;
       transition: opacity 0.22s ease, transform 0.22s ease !important;
     }
+
     .mivai-chat-window.mivai-open {
       opacity: 1 !important;
       transform: translateY(0) scale(1) !important;
@@ -263,6 +267,7 @@ window.addEventListener("load", function () {
       gap: 12px !important;
       background: linear-gradient(135deg, var(--mivai-blue), var(--mivai-bg-card-top)) !important;
     }
+
     .mivai-chat-avatar {
       width: 40px !important;
       height: 40px !important;
@@ -274,21 +279,25 @@ window.addEventListener("load", function () {
       overflow:hidden !important;
       box-shadow: 0 8px 18px rgba(0,0,0,0.45) !important;
     }
+
     .mivai-chat-avatar img {
       width: 100% !important;
       height: 100% !important;
       object-fit: cover !important;
     }
+
     .mivai-chat-title {
       font-size: 14px !important;
       font-weight: 600 !important;
       color: #fff !important;
     }
+
     .mivai-chat-subtitle {
       font-size: 11px !important;
       opacity: 0.9 !important;
       color: #f3f3ff !important;
     }
+
     .mivai-chat-close {
       margin-left: auto !important;
       cursor: pointer !important;
@@ -296,7 +305,11 @@ window.addEventListener("load", function () {
       color: #f5f5ff !important;
       transition: opacity 0.15s ease, transform 0.15s ease !important;
     }
-    .mivai-chat-close:hover { opacity: 1 !important; transform: scale(1.05) !important; }
+
+    .mivai-chat-close:hover {
+      opacity: 1 !important;
+      transform: scale(1.05) !important;
+    }
 
     .mivai-chat-body {
       background: var(--mivai-bg-card) !important;
@@ -314,12 +327,15 @@ window.addEventListener("load", function () {
       scrollbar-width: thin !important;
       scrollbar-color: rgba(245, 193, 78, 0.8) transparent !important;
     }
+
     .mivai-chat-messages::-webkit-scrollbar {
       width: 6px;
     }
+
     .mivai-chat-messages::-webkit-scrollbar-track {
       background: transparent;
     }
+
     .mivai-chat-messages::-webkit-scrollbar-thumb {
       background: rgba(245, 193, 78, 0.85);
       border-radius: 999px;
@@ -331,9 +347,11 @@ window.addEventListener("load", function () {
       display: flex !important;
       animation: mivai-msg-enter 0.22s ease-out;
     }
+
     .mivai-chat-msg-user {
       justify-content: flex-end !important;
     }
+
     .mivai-chat-bubble {
       max-width: 82% !important;
       padding: 10px 14px !important;
@@ -344,11 +362,13 @@ window.addEventListener("load", function () {
       word-break: break-word !important;
       box-shadow: 0 10px 26px rgba(0,0,0,0.65) !important;
     }
+
     .mivai-chat-bubble-user {
       background: radial-gradient(circle at 0 0, #ffffff66, var(--mivai-blue)) !important;
       color: #ffffff !important;
       border-bottom-right-radius: 6px !important;
     }
+
     .mivai-chat-bubble-bot {
       background: #141F3A !important;
       color: #f4f5ff !important;
@@ -362,6 +382,7 @@ window.addEventListener("load", function () {
       justify-content: flex-start !important;
       margin: 6px 0 4px !important;
     }
+
     .mivai-quick-inner {
       max-width: 100% !important;
       background: #141F3A !important;
@@ -372,16 +393,19 @@ window.addEventListener("load", function () {
       color:#f4f5ff !important;
       font-size: 12px !important;
     }
+
     .mivai-quick-title {
       font-weight: 600 !important;
       margin-bottom: 8px !important;
       font-size: 12px !important;
     }
+
     .mivai-quick-buttons {
       display:flex !important;
       flex-direction:column !important;
       gap:8px !important;
     }
+
     .mivai-quick-btn {
       border:none !important;
       border-radius:999px !important;
@@ -393,11 +417,13 @@ window.addEventListener("load", function () {
       transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease !important;
       width:100% !important;
     }
+
     .mivai-quick-btn:hover {
       transform:translateY(-1px) !important;
       box-shadow:0 12px 28px rgba(0,0,0,0.45) !important;
       background:#f5f5ff !important;
     }
+
     .mivai-quick-btn:active {
       transform:scale(0.97) !important;
       box-shadow:0 4px 10px rgba(0,0,0,0.3) !important;
@@ -408,6 +434,7 @@ window.addEventListener("load", function () {
       border-top: 1px solid rgba(255,255,255,0.05) !important;
       background: #050815 !important;
     }
+
     .mivai-chat-form {
       display:flex !important;
       align-items:center !important;
@@ -433,11 +460,13 @@ window.addEventListener("load", function () {
       flex-shrink: 0 !important;
       white-space: nowrap !important;
     }
+
     .mivai-chat-send:hover {
       transform:translateY(-1px) !important;
       box-shadow:0 15px 34px rgba(0,0,0,0.7) !important;
       filter: brightness(1.02) !important;
     }
+
     .mivai-chat-send:active {
       transform:scale(0.96) !important;
       box-shadow:0 4px 12px rgba(0,0,0,0.45) !important;
@@ -455,12 +484,14 @@ window.addEventListener("load", function () {
       justify-content:center !important;
       align-items:center !important;
     }
+
     .mivai-chat-branding a {
       display:flex !important;
       align-items:center !important;
       justify-content:center !important;
       padding:2px 0 !important;
     }
+
     .mivai-chat-branding img {
       height: 36px !important;
       opacity: 0.95 !important;
@@ -474,6 +505,7 @@ window.addEventListener("load", function () {
       margin:6px 0 2px !important;
       padding-left:4px !important;
     }
+
     .mivai-typing-dot {
       width:6px !important;
       height:6px !important;
@@ -481,6 +513,7 @@ window.addEventListener("load", function () {
       background:rgba(255,255,255,0.7) !important;
       animation:mivai-typing 1s infinite ease-in-out !important;
     }
+
     .mivai-typing-dot:nth-child(2) { animation-delay:0.18s !important; }
     .mivai-typing-dot:nth-child(3) { animation-delay:0.36s !important; }
 
@@ -488,7 +521,9 @@ window.addEventListener("load", function () {
       color: ${PRIMARY} !important;
       font-weight: 600 !important;
       text-decoration: none !important;
+      word-break: break-word !important;
     }
+
     .mivai-chat-link:hover {
       text-decoration: underline !important;
     }
@@ -509,12 +544,10 @@ window.addEventListener("load", function () {
       }
     }
 
-    /* NASCONDI LA LAUNCHER QUANDO FULLSCREEN */
     .mivai-hidden-launcher {
       display: none !important;
     }
 
-    /* MOBILE */
     @media (max-width: 768px) {
       .mivai-chat-window {
         left: 8px !important;
@@ -525,7 +558,6 @@ window.addEventListener("load", function () {
         max-height: calc(100vh - 96px) !important;
       }
 
-      /* QUANDO L’INPUT È FOCUS: MODAL FULLSCREEN */
       .mivai-chat-window.mivai-fullscreen {
         left: 0 !important;
         right: 0 !important;
@@ -609,9 +641,9 @@ window.addEventListener("load", function () {
     const formEl = win.querySelector(".mivai-chat-form");
     const inputEl = win.querySelector(".mivai-chat-input");
 
-    // ============  
+    // ==========================
     // FIX ZOOM iOS + FULLSCREEN
-    // ============
+    // ==========================
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     let viewportMeta = document.querySelector('meta[name="viewport"]');
     let originalViewportContent = viewportMeta
@@ -632,7 +664,9 @@ window.addEventListener("load", function () {
         originalViewportContent = viewportMeta.getAttribute("content");
       }
 
-      const base = originalViewportContent || "width=device-width, initial-scale=1.0";
+      const base =
+        originalViewportContent || "width=device-width, initial-scale=1.0";
+
       let cleaned = base
         .replace(/maximum-scale\s*=\s*[0-9.]+/i, "")
         .replace(/,\s*,/g, ",")
@@ -642,10 +676,7 @@ window.addEventListener("load", function () {
         cleaned = "width=device-width, initial-scale=1.0";
       }
 
-      viewportMeta.setAttribute(
-        "content",
-        cleaned + ", maximum-scale=1.0"
-      );
+      viewportMeta.setAttribute("content", cleaned + ", maximum-scale=1.0");
     }
 
     function restoreZoomOnBlur() {
@@ -688,7 +719,82 @@ window.addEventListener("load", function () {
     let quickWrapper = null;
 
     // ==========================
-    // FUNZIONI
+    // FUNZIONI LINK
+    // ==========================
+    function isBookingEngineUrl(url) {
+      try {
+        const parsed = new URL(url);
+        return parsed.hostname.includes("secure-reservation.cloud");
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function createSafeLink(url, labelText) {
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = labelText;
+      link.className = "mivai-chat-link";
+      return link;
+    }
+
+    function renderBotMessage(container, text) {
+      const pattern =
+        /(\[([^\]]+)\]\((https?:\/\/[^\s)]+)\))|(Prenota qui:\s*(https?:\/\/\S+))|(https?:\/\/\S+)/gi;
+
+      let lastIndex = 0;
+      let match;
+      let foundAnyLink = false;
+
+      while ((match = pattern.exec(text)) !== null) {
+        foundAnyLink = true;
+
+        if (match.index > lastIndex) {
+          const beforeText = text.slice(lastIndex, match.index);
+          container.appendChild(document.createTextNode(beforeText));
+        }
+
+        let url = "";
+        let labelText = "Apri link";
+
+        // Caso 1: Markdown [Testo](URL)
+        if (match[1]) {
+          url = match[3].trim();
+          labelText = match[2].trim() || "Apri link";
+        }
+        // Caso 2: Prenota qui: URL
+        else if (match[4]) {
+          url = match[5].trim();
+          labelText = "Prenota qui";
+        }
+        // Caso 3: URL nudo
+        else if (match[6]) {
+          url = match[6].trim();
+          labelText = isBookingEngineUrl(url) ? "Prenota qui" : "Apri link";
+        }
+
+        // Se è booking engine, forza etichetta coerente
+        if (isBookingEngineUrl(url)) {
+          labelText = "Prenota qui";
+        }
+
+        container.appendChild(createSafeLink(url, labelText));
+        lastIndex = pattern.lastIndex;
+      }
+
+      if (lastIndex < text.length) {
+        container.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+
+      if (!foundAnyLink) {
+        container.textContent = text;
+      }
+    }
+
+    // ==========================
+    // FUNZIONI UI
     // ==========================
     function renderQuickReplies() {
       if (!QUICK_REPLIES.length) return;
@@ -750,6 +856,7 @@ window.addEventListener("load", function () {
       wrapper.className =
         "mivai-chat-msg " +
         (role === "user" ? "mivai-chat-msg-user" : "mivai-chat-msg-bot");
+
       const bubble = document.createElement("div");
       bubble.className =
         "mivai-chat-bubble " +
@@ -758,35 +865,7 @@ window.addEventListener("load", function () {
           : "mivai-chat-bubble-bot");
 
       if (role === "bot") {
-        const match = text.match(/Prenota qui:\s*(https?:\/\/\S+)/i);
-        if (match) {
-          const before = text.slice(0, match.index).trim();
-          if (before) {
-            bubble.appendChild(document.createTextNode(before + " "));
-          } else {
-            bubble.appendChild(
-              document.createTextNode("👉 Prenota qui: ")
-            );
-          }
-
-          const url = match[1];
-          const link = document.createElement("a");
-          link.href = url;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = "Clicca qui";
-          link.className = "mivai-chat-link";
-          bubble.appendChild(link);
-
-          const after = text
-            .slice(match.index + match[0].length)
-            .trim();
-          if (after) {
-            bubble.appendChild(document.createTextNode(" " + after));
-          }
-        } else {
-          bubble.textContent = text;
-        }
+        renderBotMessage(bubble, text);
       } else {
         bubble.textContent = text;
       }
@@ -798,6 +877,7 @@ window.addEventListener("load", function () {
 
     function showTyping() {
       if (typingEl) return;
+
       typingEl = document.createElement("div");
       typingEl.className = "mivai-typing";
       typingEl.innerHTML = `
@@ -819,6 +899,7 @@ window.addEventListener("load", function () {
     async function sendToBackend(text) {
       showTyping();
       isSending = true;
+
       try {
         const res = await fetch(API_URL, {
           method: "POST",
@@ -832,6 +913,7 @@ window.addEventListener("load", function () {
         });
 
         const data = await res.json().catch(() => null);
+
         hideTyping();
         isSending = false;
 
@@ -847,10 +929,7 @@ window.addEventListener("load", function () {
           conversationId = data.conversationId;
         }
 
-        appendMessage(
-          data.reply || "Ops, nessuna risposta ricevuta.",
-          "bot"
-        );
+        appendMessage(data.reply || "Ops, nessuna risposta ricevuta.", "bot");
       } catch (err) {
         console.error(err);
         hideTyping();
@@ -862,6 +941,7 @@ window.addEventListener("load", function () {
     function handleUserMessage(text) {
       const clean = text.trim();
       if (!clean || isSending) return;
+
       hideQuickReplies();
       appendMessage(clean, "user");
       sendToBackend(clean);
@@ -871,17 +951,14 @@ window.addEventListener("load", function () {
       e.preventDefault();
       const text = inputEl.value.trim();
       if (!text) return;
+
       inputEl.value = "";
-      inputEl.blur(); // chiude tastiera mobile e fa uscire dal fullscreen
+      inputEl.blur();
       handleUserMessage(text);
     });
 
-    // Primo messaggio + quick replies
     setTimeout(() => {
-      appendMessage(
-        "Ciao! 👋 Come posso aiutarti?",
-        "bot"
-      );
+      appendMessage("Ciao! 👋 Come posso aiutarti?", "bot");
       renderQuickReplies();
     }, 600);
   })();
