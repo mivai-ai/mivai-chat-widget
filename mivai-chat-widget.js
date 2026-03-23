@@ -2,7 +2,7 @@
 window.addEventListener("load", function () {
   (function () {
     // ==========================
-    // CONFIG DALLO <script> (data-*)
+    // CONFIG DALLO <script> v2 (data-*)
     // ==========================
 
     function findMivaiScript() {
